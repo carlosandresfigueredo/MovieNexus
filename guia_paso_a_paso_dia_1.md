@@ -5,101 +5,77 @@ Bienvenido al primer día de desarrollo de **MovieNexus**. Hoy sentaremos las ba
 ---
  
 > [!IMPORTANT]
-> **Estructura del Proyecto:** Todo el código de Angular reside en la carpeta `frontend/`. Asegúrate de navegar a ella con `cd frontend` antes de ejecutar cualquier comando de terminal.
+> **Estructura del Proyecto:** Todo el código de Angular reside en la raíz del proyecto. Asegúrate de estar en `c:\Angular\MovieNexus` antes de ejecutar comandos.
 
 ## 🚀 Paso 1: Creación del Proyecto con SSR
-Ejecuta el siguiente comando:
+Ejecuta el siguiente comando para iniciar el proyecto con soporte para servidor:
 ```bash
 ng new MovieNexus --style css --routing true --standalone true --ssr true
 ```
 
 ---
 
-## 📂 Paso 2: Arquitectura Profesional (El Secreto del Éxito)
-Para trabajar como en el mundo real, dividiremos nuestra app en tres pilares:
+## 📂 Paso 2: Arquitectura Profesional (Clean Architecture)
+Para trabajar como en el mundo real, dividiremos nuestra app en pilares organizados:
 
-### 1. Carpeta `core/` (Lógica Central)
-Es el "cerebro" de la app. Aquí van cosas que se cargan una sola vez.
-*   `services/`: Para hablar con la API de TMDB.
-*   `interceptors/`: Para añadir seguridad a las peticiones.
-*   `models/`: Las "plantillas" de nuestros datos (Interfaces).
+### 1. Carpeta `core/` (Lógica Global)
+El "cerebro" de la app. Contiene servicios globales, modelos e interceptores.
+*   `services/`: Conexión con la API de TMDB.
+*   `models/`: Interfaces de datos (ej: `Movie.ts`).
 
-### 2. Carpeta `shared/` (Componentes "Bobos")
-Aquí van los componentes reutilizables. Se les llama "bobos" porque no tienen lógica de negocio; solo reciben datos y los muestran de forma bonita (ej: un botón, un spinner, una tarjeta).
+### 2. Carpeta `shared/` (Componentes Reutilizables)
+Aquí viven los componentes que se usan en toda la app.
+*   `components/layout/`: Aquí guardamos el **Header** y **Footer**, ya que definen el esqueleto de la web.
 
-### 3. Carpeta `features/` (Componentes "Inteligentes")
-Representan las **páginas** de la app (Home, Detalles, Buscador). Son "inteligentes" porque ellos deciden qué datos mostrar, llaman a los servicios y orquestan a los componentes bobos de la carpeta `shared`.
-
-> [!IMPORTANT]
-> **Regla de Oro:** Si un componente se usa en muchas páginas, va a `shared`. Si representa una página completa o una funcionalidad única, va a `features`.
+### 3. Carpeta `features/` (Páginas y Lógica de Negocio)
+Representan las secciones de la app (Home, Detalles, Buscador). Son componentes "inteligentes" que gestionan datos.
 
 ---
 
-## 🎨 Paso 3: Sistema de Diseño (styles.css)
-Usaremos **Variables CSS** para que el diseño sea "Premium" y fácil de cambiar:
+## 🏗️ Paso 3: Convención de Nombres "Minimalista"
+En proyectos modernos y profesionales, buscamos la máxima limpieza:
+*   **Clases:** Usamos nombres directos como `Header`, `Footer` o `Home` (en lugar de `HeaderComponent`).
+*   **Archivos:** Quitamos el `.component` del nombre. Ejemplo: `header.ts`, `header.html`, `header.css`.
+*   **Selectores:** Usamos prefijos claros para componentes estructurales (ej: `app-header`).
+
+---
+
+## 🎨 Paso 4: Sistema de Diseño (styles.css)
+Usamos **Variables CSS** para un diseño Premium y fácil de mantener:
 
 ```css
 :root {
-  --bg-color: #0f172a;    /* Fondo oscuro */
-  --primary: #38bdf8;     /* Azul principal */
-  --accent: #f43f5e;      /* Color de destaque */
-  --text-main: #f8fafc;   /* Texto principal */
-  --radius: 12px;         /* Bordes redondeados */
+  --bg-color: #0f172a;    /* Fondo oscuro sleek */
+  --primary: #38bdf8;     /* Azul vibrante */
+  --accent: #f43f5e;      /* Acento rosa/rojo */
+  --text-main: #f8fafc;   /* Texto claro */
+  --radius: 12px;         /* Bordes redondeados modernos */
 }
 ```
 
-**Ejemplo de uso:**
-```css
-.mi-boton { background-color: var(--primary); border-radius: var(--radius); }
-```
+---
+
+## 🔑 Paso 5: API Keys (TMDB)
+Para mostrar películas reales, necesitamos una **API Key** de The Movie Database.
+*   **Identificación:** Es tu "pasaporte" digital para que el servidor de TMDB te deje entrar.
+*   **Configuración:** Se guarda en `src/environments/environment.ts`.
 
 ---
 
-## 🔑 Paso 4: Conexión con el Mundo Exterior (API Keys)
-
-Para que nuestra app muestre películas reales, necesitamos conectarnos a un servidor externo. Usaremos **The Movie Database (TMDB)**.
-
-### ¿Qué es una API Key?
-Imagina que la base de datos de películas es un **club privado**. La **API Key** es tu **carnet de identidad** o pasaporte digital.
-*   **Identificación:** El servidor sabe quién pide la información.
-*   **Seguridad:** Evita que personas malintencionadas saturen el sistema.
-*   **Límites:** Como es gratuito, nos permiten un número generoso de consultas diarias.
-
-### ¿De dónde salen las URLs?
-*   `https://api.themoviedb.org/3`: Es la "oficina central" de datos.
-*   `https://image.tmdb.org/t/p`: Es el servidor dedicado exclusivamente a los posters.
-
-### 🛠️ Configuración de Entorno
-Crea el archivo `src/environments/environment.ts` y pega lo siguiente:
+## 🏠 Paso 6: Tu primera Feature
+Generamos la página de inicio y configuramos su ruta de carga perezosa (*Lazy Loading*):
 
 ```typescript
-export const environment = {
-  production: false,
-  baseUrl: 'https://api.themoviedb.org/3',
-  apiKey: 'TU_API_KEY_AQUI', // Consíguela en themoviedb.org
-  imgPath: 'https://image.tmdb.org/t/p'
-};
+// app.routes.ts
+{
+  path: '',
+  loadComponent: () => import('./features/home/home').then(m => m.Home)
+}
 ```
-
-> [!TIP]
-> **Para obtener tu llave:** Regístrate en [themoviedb.org](https://www.themoviedb.org/), ve a tu Perfil -> Ajustes -> API y solicita una clave de tipo "Developer".
-
----
-
-## 🏠 Paso 5: Creación de la Primera Feature
-1.  Genera el componente: `ng generate component features/home`.
-2.  Configura la ruta en `app.routes.ts`:
-    ```typescript
-    {
-      path: '',
-      loadComponent: () => import('./features/home/home').then(m => m.HomeComponent)
-    }
-    ```
 
 ---
 
 ## ✅ Reto del Día
-Verifica que al ejecutar `npm start` se vea tu diseño con el tema oscuro y que la estructura de carpetas tenga sus archivos `.gitkeep` para que Git no las ignore.
-
-> [!TIP]
-> **Nota sobre `.gitkeep`:** Es un archivo vacío que usamos para que Git "respete" nuestras carpetas vacías y no las borre.
+1.  Verifica que el servidor corra con `npm start`.
+2.  Asegúrate de que la carpeta `shared/components/layout` tenga tu Header y Footer.
+3.  **Nota sobre `.gitkeep`:** Solo se usa en carpetas que están **vacías**. Si la carpeta ya tiene archivos, el `.gitkeep` se puede borrar para mantener el proyecto limpio.
