@@ -1,36 +1,39 @@
-import { Component, inject, Input, OnInit, signal } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MovieService } from '../../core/services/movie.service';
 import { Movie } from '../../core/models/movie.model';
+import { CastCard } from '../../shared/components/cast-card/cast-card';
+import { Observable, forkJoin } from 'rxjs';
+import { CreditsResponse } from '../../core/models/cast.model';
 
 @Component({
   selector: 'app-movie-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CastCard],
   templateUrl: './movie-details.html',
   styleUrl: './movie-details.css'
 })
 export class MovieDetails implements OnInit {
   private movieService = inject(MovieService);
 
-  // Recibimos el ID directamente desde la URL gracias a withComponentInputBinding()
   @Input() id!: string;
 
-  // Signal para almacenar la película actual
-  movie = signal<Movie | null>(null);
+  // Observable que contendrá tanto los detalles como los créditos
+  movieData$!: Observable<{ details: Movie; credits: CreditsResponse }>;
 
   ngOnInit(): void {
     if (this.id) {
-      this.movieService.getMovieById(this.id).subscribe({
-        next: (movie) => this.movie.set(movie),
-        error: (err) => console.error('Error al cargar la película', err)
+      // forkJoin ejecuta múltiples peticiones en paralelo y emite un solo objeto
+      // cuando TODAS han terminado exitosamente.
+      this.movieData$ = forkJoin({
+        details: this.movieService.getMovieById(this.id),
+        credits: this.movieService.getMovieCredits(this.id)
       });
     }
   }
 
-  get backdropUrl() {
-    return this.movie()?.backdrop_path 
-      ? `https://image.tmdb.org/t/p/original${this.movie()?.backdrop_path}`
-      : '';
+  // Helper para construir la URL del backdrop
+  getBackdropUrl(path: string | null | undefined): string {
+    return path ? `https://image.tmdb.org/t/p/original${path}` : '';
   }
 }

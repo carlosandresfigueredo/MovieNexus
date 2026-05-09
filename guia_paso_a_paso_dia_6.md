@@ -141,6 +141,37 @@ En `movie-card.html`, envolvemos nuestra tarjeta.
 
 ---
 
+## 🚀 Paso 5: Configuración de Server-Side Rendering (SSR) para Producción
+
+Si intentamos subir nuestra aplicación a **Vercel** o hacer un *build* de producción en este punto, obtendríamos un error. ¿Por qué?
+
+Angular, por defecto, intenta hacer **Pre-rendering** (generar archivos HTML estáticos durante el build) de todas las rutas. Sin embargo, para una ruta dinámica como `movie/:id`, Angular no sabe qué películas existen de antemano (¡hay miles en TMDB!), por lo que no puede generar un HTML estático para cada una.
+
+Para solucionar esto, debemos decirle a Angular que la ruta de detalles debe generarse **bajo demanda** en el servidor (SSR) cuando el usuario la visita, no durante el build.
+
+### 1. Configurar las rutas del servidor
+Abre `src/app/app.routes.server.ts` y añade una regla específica para nuestra nueva ruta ANTES de la regla general (`**`).
+
+```typescript
+// src/app/app.routes.server.ts
+import { RenderMode, ServerRoute } from '@angular/ssr';
+
+export const serverRoutes: ServerRoute[] = [
+  {
+    path: 'movie/:id',
+    renderMode: RenderMode.Server, // SSR: Renderizar bajo demanda en el servidor
+  },
+  {
+    path: '**',
+    renderMode: RenderMode.Prerender, // Pre-renderizar el resto (como la Home)
+  },
+];
+```
+
+Con esto, nuestra página principal (`/`) seguirá siendo súper rápida porque se genera en el momento de compilar, mientras que los detalles de cada película (`/movie/:id`) se generarán en vivo cuando el usuario navegue hacia ellos.
+
+---
+
 ## ✅ Prueba de Aprendizaje (Checklist)
 
 1.  **¿Qué significa el colon `:` en una ruta como `movie/:id`?**
@@ -156,6 +187,6 @@ En `movie-card.html`, envolvemos nuestra tarjeta.
 Guarda tu progreso:
 ```bash
 git add .
-git commit -m "feat: implementar navegación y página de detalles con parámetros"
+git commit -m "feat: implementar navegación, detalles y configurar SSR"
 git push origin main
 ```

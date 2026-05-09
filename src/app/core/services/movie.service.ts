@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Movie, MovieResponse } from '../models/movie.model';
+import { CreditsResponse } from '../models/cast.model';
 
 /**
  * SERVICIO DE PELÍCULAS (EL MENSAJERO)
@@ -37,5 +38,13 @@ export class MovieService {
    */
   getMovieById(id: string | number) {
     return this.http.get<Movie>(`${this.apiUrl}/movie/${id}`);
+  }
+
+  /**
+   * Obtiene el elenco de actores de una película específica.
+   * @param id ID de la película en TMDB
+   */
+  getMovieCredits(id: string | number) {
+    return this.http.get<CreditsResponse>(`${this.apiUrl}/movie/${id}/credits`);
   }
 }

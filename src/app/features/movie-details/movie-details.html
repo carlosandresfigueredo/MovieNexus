@@ -1,22 +1,48 @@
-@if (movie(); as movieData) {
+<!-- Usamos el Async Pipe para suscribirnos al Observable y desenvolver los datos -->
+@if (movieData$ | async; as data) {
   <div class="details-container">
     <div class="backdrop-wrapper">
-      <img [src]="backdropUrl" [alt]="movieData.title" class="backdrop-image">
+      <!-- Usamos el helper para la URL -->
+      <img [src]="getBackdropUrl(data.details.backdrop_path)" [alt]="data.details.title" class="backdrop-image">
       <div class="backdrop-overlay"></div>
     </div>
 
     <div class="content-wrapper">
       <header class="movie-header">
-        <h1 class="movie-title">{{ movieData.title }}</h1>
+        <h1 class="movie-title">{{ data.details.title }}</h1>
         <div class="movie-meta">
-          <span class="rating">⭐ {{ movieData.vote_average | number:'1.1-1' }}</span>
-          <span class="release-date">{{ movieData.release_date | date:'yyyy' }}</span>
+          <span class="rating">⭐ {{ data.details.vote_average | number:'1.1-1' }}</span>
+          <span class="release-date">{{ data.details.release_date | date:'yyyy' }}</span>
+          <!-- Mostrar duración si existe -->
+          @if (data.details.runtime) {
+            <span class="runtime">⏳ {{ data.details.runtime }} min</span>
+          }
+        </div>
+        
+        <!-- Mostrar géneros -->
+        <div class="genres">
+          @for (genre of data.details.genres; track genre.id) {
+            <span class="genre-tag">{{ genre.name }}</span>
+          }
         </div>
       </header>
 
       <section class="movie-info">
         <h2>Sinopsis</h2>
-        <p class="overview">{{ movieData.overview }}</p>
+        <p class="overview">{{ data.details.overview }}</p>
+      </section>
+
+      <!-- Nueva sección: Elenco (Cast) -->
+      <section class="movie-cast">
+        <h2>Elenco Principal</h2>
+        <div class="cast-track">
+          <!-- Iteramos sobre los actores, tomando solo los primeros 15 -->
+          @for (actor of data.credits.cast | slice:0:15; track actor.id) {
+            <app-cast-card [actor]="actor"></app-cast-card>
+          } @empty {
+            <p>No hay información del elenco.</p>
+          }
+        </div>
       </section>
 
       <button class="back-button" onclick="history.back()">
@@ -27,6 +53,6 @@
 } @else {
   <div class="loading-state">
     <div class="spinner"></div>
-    <p>Cargando detalles...</p>
+    <p>Cargando detalles increíbles...</p>
   </div>
 }
