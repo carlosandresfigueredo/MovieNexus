@@ -2,22 +2,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
 
 :root {
-  /* Paleta de colores Premium */
-  --bg-color: #0f172a;
-  --bg-accent: #1e293b;
-  --primary: #38bdf8;
+  /* Paleta de colores Premium (Dark Mode Sleek) */
+  --bg-color: #020617;     /* Azul oscuro casi negro */
+  --bg-accent: #0f172a;    /* Fondo de tarjetas y secciones */
+  --primary: #38bdf8;      /* Azul cielo brillante */
+  --primary-glow: rgba(56, 189, 248, 0.4);
   --primary-hover: #0ea5e9;
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --accent: #f43f5e;
+  --text-main: #f8fafc;    /* Texto casi blanco */
+  --text-muted: #94a3b8;   /* Texto gris para descripciones */
+  --accent: #f43f5e;       /* Rosa/Rojo para favoritos y alertas */
   
-  /* Sombras y bordes */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  --radius: 12px;
+  /* Gradientes Dinámicos */
+  --grad-main: linear-gradient(135deg, var(--primary), #818cf8);
+  --grad-surface: linear-gradient(to bottom, rgba(255, 255, 255, 0.03), transparent);
+  --grad-dark: linear-gradient(180deg, transparent, var(--bg-color));
+
+  /* Sistema de Espaciado (Layout Consistente) */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 3rem;
+
+  /* Bordes y Sombras Premium */
+  --radius: 16px;
+  --radius-sm: 8px;
+  --border-glass: 1px solid rgba(255, 255, 255, 0.1);
+  --shadow-premium: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3);
   
-  /* Transiciones */
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Transiciones Suaves */
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * {
@@ -64,9 +77,39 @@ ul {
   padding: 2rem;
 }
 
-/* Scrollbar personalizada */
+/* Botones Premium */
+.btn-premium {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.8rem;
+  background: var(--grad-main);
+  color: white;
+  font-weight: 600;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 4px 15px var(--primary-glow);
+}
+
+.btn-premium:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--primary-glow);
+  filter: brightness(1.1);
+}
+
+/* Efectos de Texto */
+.text-gradient {
+  background: var(--grad-main);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* Scrollbar personalizada (Elegante) */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
@@ -76,6 +119,7 @@ ul {
 ::-webkit-scrollbar-thumb {
   background: var(--bg-accent);
   border-radius: 10px;
+  border: 2px solid var(--bg-color);
 }
 
 ::-webkit-scrollbar-thumb:hover {

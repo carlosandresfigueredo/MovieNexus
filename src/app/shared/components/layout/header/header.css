@@ -1,11 +1,13 @@
 .navbar {
-  background-color: rgba(15, 23, 42, 0.8);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: var(--glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: var(--border-glass);
   position: sticky;
   top: 0;
-  z-index: 100;
-  padding: 1rem 2rem;
+  z-index: 1000;
+  padding: 1.2rem 2rem;
+  transition: var(--transition);
 }
 
 .navbar-content {
@@ -17,31 +19,48 @@
 }
 
 .logo-text {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 800;
   color: var(--text-main);
+  letter-spacing: -1px;
 }
 
 .logo-text span {
-  color: var(--primary);
+  background: var(--grad-main);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .nav-links {
   display: flex;
-  gap: 2rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
+  gap: 2.5rem;
 }
 
 .nav-links a {
   color: var(--text-muted);
   font-weight: 600;
   font-size: 0.95rem;
-  text-decoration: none;
-  transition: color 0.3s ease;
+  position: relative;
+  padding: 0.5rem 0;
 }
 
-.nav-links a:hover, .nav-links a.active {
-  color: var(--primary);
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--grad-main);
+  transition: var(--transition);
+}
+
+.nav-links a:hover::after, 
+.nav-links a.active::after {
+  width: 100%;
+}
+
+.nav-links a:hover, 
+.nav-links a.active {
+  color: var(--text-main);
 }

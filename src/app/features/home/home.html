@@ -1,7 +1,18 @@
-<div class="welcome-container">
-  <h1>Bienvenido a MovieNexus</h1>
-  <p>Explora las películas más populares, busca tus favoritas y mantente al día con los últimos estrenos.</p>
-  <div class="actions">
-    <button class="btn-primary">Empezar a Explorar</button>
-  </div>
+@if (featuredMovie(); as movie) {
+  <app-hero [movie]="movie"></app-hero>
+} @else {
+  <!-- Estado de carga simple (Skeleton) -->
+  <div class="loading-hero"></div>
+}
+
+<div class="home-sections">
+  <app-movie-slider 
+    title="Tendencias de Hoy" 
+    [movies]="trendingMovies()">
+  </app-movie-slider>
+
+  <app-movie-slider 
+    title="Las más Populares" 
+    [movies]="popularMovies()">
+  </app-movie-slider>
 </div>

@@ -1,0 +1,32 @@
+.slider-container {
+  padding: 2rem 0;
+  overflow: hidden;
+}
+
+.slider-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  padding: 0 4%;
+  color: white;
+}
+
+.slider-track {
+  display: flex;
+  gap: 1.25rem;
+  padding: 0 4% 1.5rem 4%;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.slider-track::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Añadir un poco de espacio al final para que la última card no quede pegada */
+.slider-track::after {
+  content: '';
+  flex: 0 0 4%;
+}

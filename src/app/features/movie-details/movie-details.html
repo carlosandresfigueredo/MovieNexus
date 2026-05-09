@@ -1,0 +1,32 @@
+@if (movie(); as movieData) {
+  <div class="details-container">
+    <div class="backdrop-wrapper">
+      <img [src]="backdropUrl" [alt]="movieData.title" class="backdrop-image">
+      <div class="backdrop-overlay"></div>
+    </div>
+
+    <div class="content-wrapper">
+      <header class="movie-header">
+        <h1 class="movie-title">{{ movieData.title }}</h1>
+        <div class="movie-meta">
+          <span class="rating">⭐ {{ movieData.vote_average | number:'1.1-1' }}</span>
+          <span class="release-date">{{ movieData.release_date | date:'yyyy' }}</span>
+        </div>
+      </header>
+
+      <section class="movie-info">
+        <h2>Sinopsis</h2>
+        <p class="overview">{{ movieData.overview }}</p>
+      </section>
+
+      <button class="back-button" onclick="history.back()">
+        <span class="icon">←</span> Volver
+      </button>
+    </div>
+  </div>
+} @else {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Cargando detalles...</p>
+  </div>
+}

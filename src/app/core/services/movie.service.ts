@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { MovieResponse } from '../models/movie.model';
+import { Movie, MovieResponse } from '../models/movie.model';
 
 /**
  * SERVICIO DE PELÍCULAS (EL MENSAJERO)
@@ -22,5 +22,20 @@ export class MovieService {
    */
   getTrendingMovies() {
     return this.http.get<MovieResponse>(`${this.apiUrl}/trending/movie/day`);
+  }
+
+  /**
+   * Obtiene las películas más populares.
+   */
+  getPopularMovies() {
+    return this.http.get<MovieResponse>(`${this.apiUrl}/movie/popular`);
+  }
+
+  /**
+   * Obtiene los detalles de una película específica por su ID.
+   * @param id ID de la película en TMDB
+   */
+  getMovieById(id: string | number) {
+    return this.http.get<Movie>(`${this.apiUrl}/movie/${id}`);
   }
 }
