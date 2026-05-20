@@ -1,14 +1,13 @@
 import { HttpInterceptorFn } from '@angular/common/http';
+import { inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { environment } from '../../../environments/environment';
 
 /**
- * INTERCEPTOR DE API (EL ESCUDO AUTOMÁTICO)
- * 
- * ¿Cómo funciona?
- * Este interceptor "atrapa" cada petición HTTP antes de que salga al servidor.
- * Si la URL es de TMDB, le añade la API Key y el idioma de forma automática.
+ * INTERCEPTOR DE API (EL ESCUDO AUTOMÁTICO Y COMPATIBILIDAD SSR)
  */
 export const apiInterceptor: HttpInterceptorFn = (req, next) => {
+  const platformId = inject(PLATFORM_ID);
   
   // 1. Verificamos si la petición es para la API de TMDB
   if (req.url.includes('api.themoviedb.org')) {
@@ -22,7 +21,15 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
       }
     });
 
-    // 3. Enviamos la petición modificada
+    // 3. Si estamos en el navegador, redirigimos a través del proxy local
+    if (isPlatformBrowser(platformId)) {
+      const proxyReq = apiReq.clone({
+        url: apiReq.url.replace('https://api.themoviedb.org/3', '/api/tmdb')
+      });
+      return next(proxyReq);
+    }
+
+    // 4. Si estamos en el servidor (SSR), dejamos pasar la petición normal (Node la maneja de forma nativa sin fallas)
     return next(apiReq);
   }
 

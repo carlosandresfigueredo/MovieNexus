@@ -1,0 +1,21 @@
+<div class="favorites-container">
+  <header class="favorites-header">
+    <h1 class="page-title">Mis <span>Favoritos</span></h1>
+    <p class="page-subtitle">Tus películas guardadas para ver más tarde</p>
+  </header>
+
+  @if (favoriteMovies.length > 0) {
+    <div class="movies-grid">
+      @for (movie of favoriteMovies; track movie.id) {
+        <app-movie-card [movie]="movie"></app-movie-card>
+      }
+    </div>
+  } @else {
+    <div class="empty-state">
+      <div class="empty-icon">❤️</div>
+      <h2>Tu lista está vacía</h2>
+      <p>Aún no has guardado ninguna película. ¡Explora el catálogo y añade tus favoritas!</p>
+      <button routerLink="/" class="browse-btn">Explorar Películas</button>
+    </div>
+  }
+</div>

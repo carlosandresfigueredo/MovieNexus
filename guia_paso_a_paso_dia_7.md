@@ -119,9 +119,59 @@ En `cast-card.html`:
 </div>
 ```
 
-*(Nota: Los estilos CSS completos los encontrarás en el código fuente del proyecto, enfocados en darle forma de tarjeta pequeña).*
+### 4. Los Estilos (CSS)
+En `cast-card.css` aplicaremos estilos para que parezca una tarjeta pequeña y elegante.
 
----
+```css
+.cast-card {
+  width: 140px;
+  flex: 0 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #1a1a1a;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  transition: transform 0.2s;
+}
+
+.cast-card:hover {
+  transform: translateY(-5px);
+}
+
+.profile-container {
+  aspect-ratio: 2 / 3;
+  width: 100%;
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.actor-info {
+  padding: 0.8rem;
+}
+
+.actor-name {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin: 0 0 0.3rem 0;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.actor-character {
+  font-size: 0.8rem;
+  margin: 0;
+  color: #aaa;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+```
+
 
 ## 🎬 Paso 4: Magia con RxJS y Async Pipe en MovieDetails
 

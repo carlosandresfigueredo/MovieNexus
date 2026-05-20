@@ -5,9 +5,46 @@
     </div>
     <ul class="nav-links">
       <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a></li>
-      <li><a routerLink="/movies" routerLinkActive="active">Películas</a></li>
-      <li><a routerLink="/search" routerLinkActive="active">Buscar</a></li>
       <li><a routerLink="/favorites" routerLinkActive="active">Favoritos</a></li>
     </ul>
+
+    <!-- Buscador en tiempo real -->
+    <div class="search-container">
+      <input 
+        type="text" 
+        class="search-input" 
+        placeholder="Buscar películas..." 
+        [value]="searchQuery()"
+        (input)="onSearchInput($event)"
+      >
+      
+      <!-- Indicador de carga -->
+      @if (isSearching()) {
+        <div class="search-spinner"></div>
+      }
+
+      <!-- Dropdown de resultados -->
+      @if (searchResults().length > 0) {
+        <div class="search-results-dropdown">
+          @for (movie of searchResults(); track movie.id) {
+            <a 
+              [routerLink]="['/movie', movie.id]" 
+              class="search-result-item"
+              (click)="closeSearch()"
+            >
+              <img 
+                [src]="movie.poster_path ? 'https://image.tmdb.org/t/p/w92' + movie.poster_path : 'assets/no-poster.png'" 
+                [alt]="movie.title"
+                class="result-poster"
+              >
+              <div class="result-info">
+                <span class="result-title">{{ movie.title }}</span>
+                <span class="result-year">{{ movie.release_date | date:'yyyy' }}</span>
+              </div>
+            </a>
+          }
+        </div>
+      }
+    </div>
   </div>
 </nav>

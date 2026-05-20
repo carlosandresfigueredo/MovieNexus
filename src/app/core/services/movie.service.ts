@@ -26,10 +26,13 @@ export class MovieService {
   }
 
   /**
-   * Obtiene las películas más populares.
+   * Obtiene las películas más populares con soporte para paginación.
+   * @param page Número de página a obtener (por defecto 1)
    */
-  getPopularMovies() {
-    return this.http.get<MovieResponse>(`${this.apiUrl}/movie/popular`);
+  getPopularMovies(page: number = 1) {
+    return this.http.get<MovieResponse>(`${this.apiUrl}/movie/popular`, {
+      params: { page: page.toString() }
+    });
   }
 
   /**
@@ -46,5 +49,15 @@ export class MovieService {
    */
   getMovieCredits(id: string | number) {
     return this.http.get<CreditsResponse>(`${this.apiUrl}/movie/${id}/credits`);
+  }
+
+  /**
+   * Busca películas por término de búsqueda.
+   * @param query Texto a buscar
+   */
+  searchMovies(query: string) {
+    return this.http.get<MovieResponse>(`${this.apiUrl}/search/movie`, {
+      params: { query }
+    });
   }
 }

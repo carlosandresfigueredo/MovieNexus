@@ -108,7 +108,12 @@
   display: none;
 }
 
-.back-button {
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.back-button, .favorite-toggle-btn {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
@@ -126,6 +131,26 @@
   background: white;
   color: black;
   transform: translateX(-5px);
+}
+
+.favorite-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.favorite-toggle-btn.active {
+  background: rgba(229, 9, 20, 0.2);
+  border-color: rgba(229, 9, 20, 0.5);
+}
+
+.heart-icon-large {
+  width: 20px;
+  height: 20px;
+  fill: rgba(255, 255, 255, 0.5);
+  transition: fill 0.3s ease;
+}
+
+.favorite-toggle-btn.active .heart-icon-large {
+  fill: #e50914;
 }
 
 .loading-state {
