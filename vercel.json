@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/tmdb/(.*)",
+      "destination": "/api/tmdb.js?splat=$1"
+    }
+  ]
+}

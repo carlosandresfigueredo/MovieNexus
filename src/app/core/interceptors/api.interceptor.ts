@@ -21,18 +21,15 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
       }
     });
 
-    // 3. Si estamos en el navegador y es entorno local (localhost), redirigimos a través del proxy local
+    // 3. Si estamos en el navegador, redirigimos a través del proxy local/producción (/api/tmdb)
     if (isPlatformBrowser(platformId)) {
-      const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      if (isLocal) {
-        const proxyReq = apiReq.clone({
-          url: apiReq.url.replace('https://api.themoviedb.org/3', '/api/tmdb')
-        });
-        return next(proxyReq);
-      }
+      const proxyReq = apiReq.clone({
+        url: apiReq.url.replace('https://api.themoviedb.org/3', '/api/tmdb')
+      });
+      return next(proxyReq);
     }
 
-    // 4. Si estamos en producción o en el servidor (SSR), hacemos la llamada directa a la API de TMDB
+    // 4. Si estamos en el servidor (SSR), hacemos la llamada directa a la API de TMDB (Node lo maneja sin CORS)
     return next(apiReq);
   }
 
