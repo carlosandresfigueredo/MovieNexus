@@ -1,0 +1,56 @@
+.empty-state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 2rem;
+  background-color: var(--card-bg, rgba(255, 255, 255, 0.05));
+  border-radius: 12px;
+  margin: 2rem auto;
+  max-width: 500px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  opacity: 0.8;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+}
+
+.empty-title {
+  font-size: 1.5rem;
+  color: var(--text-color, #fff);
+  margin-bottom: 0.5rem;
+}
+
+.empty-message {
+  color: var(--text-secondary, #aaa);
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.action-btn {
+  background-color: var(--primary-color, #e50914);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.action-btn:hover {
+  background-color: var(--primary-hover, #f40612);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(229, 9, 20, 0.4);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

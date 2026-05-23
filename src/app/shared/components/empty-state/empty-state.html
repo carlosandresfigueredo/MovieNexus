@@ -1,0 +1,9 @@
+<div class="empty-state-container">
+  <div class="empty-icon">{{ icon }}</div>
+  <h2 class="empty-title">{{ title }}</h2>
+  <p class="empty-message">{{ message }}</p>
+  
+  @if (actionText && actionLink) {
+    <button [routerLink]="actionLink" class="action-btn">{{ actionText }}</button>
+  }
+</div>
