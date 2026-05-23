@@ -6,13 +6,15 @@ import { MovieService } from '../../core/services/movie.service';
 import { Hero } from './components/hero/hero';
 import { MovieSlider } from '../../shared/components/movie-slider/movie-slider';
 import { MovieCard } from '../../shared/components/movie-card/movie-card';
+import { SkeletonHero } from '../../shared/components/skeleton-hero/skeleton-hero';
+import { SkeletonCard } from '../../shared/components/skeleton-card/skeleton-card';
 import { Movie } from '../../core/models/movie.model';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, Hero, MovieSlider, MovieCard],
+  imports: [CommonModule, Hero, MovieSlider, MovieCard, SkeletonHero, SkeletonCard],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

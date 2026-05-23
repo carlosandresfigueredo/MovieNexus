@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MovieService } from '../../core/services/movie.service';
 import { Movie } from '../../core/models/movie.model';
 import { CastCard } from '../../shared/components/cast-card/cast-card';
+import { MovieTrailer } from './components/movie-trailer/movie-trailer';
 import { Observable, forkJoin } from 'rxjs';
 import { CreditsResponse } from '../../core/models/cast.model';
 import { FavoritesService } from '../../core/services/favorites.service';
@@ -10,7 +11,7 @@ import { FavoritesService } from '../../core/services/favorites.service';
 @Component({
   selector: 'app-movie-details',
   standalone: true,
-  imports: [CommonModule, CastCard],
+  imports: [CommonModule, CastCard, MovieTrailer],
   templateUrl: './movie-details.html',
   styleUrl: './movie-details.css'
 })

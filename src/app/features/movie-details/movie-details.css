@@ -40,6 +40,26 @@
   z-index: 10;
 }
 
+/* Layout póster + info lado a lado */
+.poster-and-info {
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.poster-img {
+  width: 280px;
+  min-width: 280px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.poster-img:hover {
+  transform: scale(1.03);
+}
+
 .movie-title {
   font-size: 3.5rem;
   font-weight: 800;
@@ -176,6 +196,17 @@
 }
 
 @media (max-width: 768px) {
+  .poster-and-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .poster-img {
+    width: 200px;
+    min-width: 200px;
+  }
+
   .movie-title {
     font-size: 2.5rem;
   }
@@ -183,4 +214,64 @@
   .content-wrapper {
     margin-top: -100px;
   }
+
+  .genres {
+    justify-content: center;
+  }
+
+  .movie-meta {
+    justify-content: center;
+  }
+}
+
+/* === Sección de Tráiler === */
+.trailer-section {
+  margin-bottom: 3rem;
+}
+
+.trailer-section h2 {
+  font-size: 1.5rem;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+}
+
+/* Placeholders para Deferrable Views */
+.trailer-placeholder {
+  height: 400px;
+  background: rgba(255, 255, 255, 0.03);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  color: #888;
+  font-size: 1.1rem;
+}
+
+.cast-placeholder {
+  height: 200px;
+  background: rgba(255, 255, 255, 0.03);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  color: #888;
+  font-size: 1.1rem;
+}
+
+.defer-spinner {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  color: #e50914;
+  font-weight: bold;
+}
+
+.defer-error {
+  color: #e50914;
+  text-align: center;
+  padding: 2rem;
 }
