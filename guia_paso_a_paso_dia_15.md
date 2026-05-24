@@ -370,6 +370,43 @@ Para probarlo localmente como PWA completa, necesitas un servidor estático:
 
 ---
 
+### Paso 10: Configurar `vercel.json` para la PWA (CRÍTICO)
+
+Si subes tu PWA a Vercel sin esta configuración, notarás que la PWA no carga correctamente o el Service Worker no se actualiza. Esto sucede porque Vercel cachea agresivamente los archivos en el servidor por defecto y no envía las rutas correctas al Service Worker en un entorno SPA.
+
+Abre el archivo `vercel.json` en la raíz de tu proyecto y asegúrate de que tenga este contenido:
+
+```json
+{
+  "headers": [
+    {
+      "source": "/(.*)/(ngsw-worker\\.js|ngsw\\.json)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/tmdb/(.*)",
+      "destination": "/api/tmdb.js?splat=$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+```
+
+*   **headers**: Le dice a Vercel que NUNCA guarde en caché el archivo `ngsw-worker.js` (el Service Worker) ni el `ngsw.json`. Así, cuando publiques una nueva versión, los dispositivos la detectarán de inmediato.
+*   **rewrites**: Le dice a Vercel que cualquier ruta (ej. `/movie/123`) debe ser manejada por `index.html`. Sin esto, al recargar la página la PWA se rompería devolviendo un error 404 del servidor.
+
+---
+
 ## Parte 2: Pruebas Unitarias (Testing) a Profundidad 🧪
 
 Las pruebas automatizadas son como crear un "robot inspector" que revisa tu código constantemente para asegurarse de que no rompiste nada al agregar nuevas funciones. En empresas y proyectos profesionales, **no se sube código a producción si no pasa las pruebas**. Punto. Sin excepción.
@@ -420,7 +457,7 @@ Toda buena prueba unitaria se divide mentalmente en **3 pasos**. Memorízalos po
 
 ---
 
-### Paso 10: Escribir una prueba para el `MovieService`
+### Paso 11: Escribir una prueba para el `MovieService`
 
 Vamos a poner en práctica todo esto probando un **Servicio**. Los servicios son el mejor lugar para empezar porque manejan la lógica pura y las peticiones a la API — sin componentes visuales que compliquen las cosas.
 
@@ -540,7 +577,7 @@ describe('MovieService', () => {
 
 ---
 
-### Paso 11: Ejecutar las pruebas
+### Paso 12: Ejecutar las pruebas
 
 Abre tu terminal y ejecuta:
 
