@@ -6,6 +6,13 @@
 /out-tsc
 /bazel-out
 
+# Ignorar guías
+/guias/
+guia_paso_a_paso_dia_*.md
+implementation_plan*.md
+academic_plan.md
+
+
 # Node
 /node_modules
 npm-debug.log
@@ -42,3 +49,7 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Archivos de entorno
+/src/environments/environment.ts
+/src/environments/environment.development.ts
