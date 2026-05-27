@@ -2,7 +2,7 @@
   "name": "MovieNexus",
   "short_name": "MovieNexus",
   "description": "Descubre, busca y guarda tus películas favoritas",
-  "theme_color": "#111827",
+  "theme_color": "#1e3a8a",
   "background_color": "#0f172a",
   "display": "standalone",
   "orientation": "portrait-primary",
