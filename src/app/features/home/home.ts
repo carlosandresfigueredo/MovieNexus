@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 // 1. Necesitamos herramientas para interactuar con el DOM de forma segura
 import { AfterViewInit, ElementRef, ViewChild, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
@@ -16,6 +16,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, Hero, MovieSlider, MovieCard, SkeletonHero, SkeletonCard],
   templateUrl: './home.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './home.css',
 })
 export class Home implements OnInit, AfterViewInit {
@@ -24,7 +25,7 @@ export class Home implements OnInit, AfterViewInit {
 
   // 2. Marcamos un elemento del HTML para observarlo
   @ViewChild('infiniteAnchor') infiniteAnchor!: ElementRef;
-  
+
   // Señales para manejar los datos de forma reactiva
   featuredMovie = signal<Movie | null>(null);
   trendingMovies = signal<Movie[]>([]);
@@ -43,7 +44,7 @@ export class Home implements OnInit, AfterViewInit {
           this.trendingMovies.set(data.results);
         }
       },
-      error: (err) => console.error('❌ Error Tendencias:', err)
+      error: (err) => console.error('❌ Error Tendencias:', err),
     });
 
     // 2. Obtener Populares (Página 1 para Slider y Catálogo)
@@ -53,7 +54,7 @@ export class Home implements OnInit, AfterViewInit {
         this.catalogMovies.set(data.results);
         this.currentPage.set(2);
       },
-      error: (err) => console.error('❌ Error Populares:', err)
+      error: (err) => console.error('❌ Error Populares:', err),
     });
   }
 
@@ -65,12 +66,15 @@ export class Home implements OnInit, AfterViewInit {
   }
 
   private initInfiniteScroll(): void {
-    const observer = new IntersectionObserver((entries) => {
-      // 4. Si el ancla entra en el campo de visión y no estamos cargando...
-      if (entries[0].isIntersecting && !this.isFetchingNextPage()) {
-        this.loadMoreMovies();
-      }
-    }, { rootMargin: '200px' }); // 'rootMargin' permite cargar 200px antes de llegar al final
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // 4. Si el ancla entra en el campo de visión y no estamos cargando...
+        if (entries[0].isIntersecting && !this.isFetchingNextPage()) {
+          this.loadMoreMovies();
+        }
+      },
+      { rootMargin: '200px' },
+    ); // 'rootMargin' permite cargar 200px antes de llegar al final
 
     observer.observe(this.infiniteAnchor.nativeElement);
   }
@@ -81,9 +85,9 @@ export class Home implements OnInit, AfterViewInit {
       next: (data) => {
         // 5. Inmutabilidad: Concatenamos los resultados usando el operador spread [...]
         this.catalogMovies.set([...this.catalogMovies(), ...data.results]);
-        this.currentPage.update(p => p + 1);
+        this.currentPage.update((p) => p + 1);
         this.isFetchingNextPage.set(false);
-      }
+      },
     });
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EmptyState } from '../../shared/components/empty-state/empty-state';
 
@@ -7,6 +7,7 @@ import { EmptyState } from '../../shared/components/empty-state/empty-state';
   standalone: true,
   imports: [CommonModule, EmptyState],
   templateUrl: './not-found.html',
-  styleUrl: './not-found.css'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './not-found.css',
 })
 export class NotFound {}

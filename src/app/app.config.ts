@@ -4,7 +4,11 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { provideServiceWorker } from '@angular/service-worker';
 
 import { routes } from './app.routes';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import {
+  provideClientHydration,
+  withEventReplay,
+  withNoIncrementalHydration,
+} from '@angular/platform-browser';
 import { apiInterceptor } from './core/interceptors/api.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 
@@ -14,12 +18,12 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withComponentInputBinding(), withViewTransitions()),
     provideHttpClient(
       withFetch(), // Optimizamos para usar la API Fetch moderna
-      withInterceptors([apiInterceptor, errorInterceptor]) // Registramos interceptores
+      withInterceptors([apiInterceptor, errorInterceptor]), // Registramos interceptores
     ),
-    provideClientHydration(withEventReplay()),
+    provideClientHydration(withEventReplay(), withNoIncrementalHydration()),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
-      registrationStrategy: 'registerWhenStable:30000'
-    })
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
   ],
 };

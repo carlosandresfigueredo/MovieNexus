@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -7,7 +7,8 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './empty-state.html',
-  styleUrl: './empty-state.css'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './empty-state.css',
 })
 export class EmptyState {
   @Input() icon: string = '🔍';

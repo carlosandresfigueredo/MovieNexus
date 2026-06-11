@@ -1,11 +1,11 @@
-import { Component, inject, Input, OnInit, signal } from '@angular/core';
+import { Component, inject, Input, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MovieService } from '../../../../core/services/movie.service';
 import { SafePipe } from '../../../../shared/pipes/safe.pipe';
 
 /**
  * COMPONENTE DE TRÁILER (Componente "pesado" que se carga de forma diferida)
- * 
+ *
  * Este componente incrusta un reproductor de YouTube para mostrar el tráiler oficial.
  * Al ser un iframe de YouTube, es un recurso pesado que no debería cargarse
  * hasta que el usuario realmente quiera verlo.
@@ -17,13 +17,14 @@ import { SafePipe } from '../../../../shared/pipes/safe.pipe';
   template: `
     @if (trailerKey()) {
       <div class="trailer-wrapper">
-        <iframe 
+        <iframe
           [src]="'https://www.youtube.com/embed/' + trailerKey() | safe"
           title="Tráiler Oficial"
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
-          class="trailer-iframe">
+          class="trailer-iframe"
+        >
         </iframe>
       </div>
     } @else {
@@ -33,11 +34,12 @@ import { SafePipe } from '../../../../shared/pipes/safe.pipe';
       </div>
     }
   `,
-  styleUrl: './movie-trailer.css'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './movie-trailer.css',
 })
 export class MovieTrailer implements OnInit {
   private movieService = inject(MovieService);
-  
+
   @Input() movieId!: number;
   trailerKey = signal<string | null>(null);
 
@@ -47,12 +49,12 @@ export class MovieTrailer implements OnInit {
         next: (data) => {
           // Buscamos el tráiler oficial de YouTube
           const trailer = data.results.find(
-            v => v.site === 'YouTube' && (v.type === 'Trailer' || v.type === 'Teaser')
+            (v) => v.site === 'YouTube' && (v.type === 'Trailer' || v.type === 'Teaser'),
           );
           if (trailer) {
             this.trailerKey.set(trailer.key);
           }
-        }
+        },
       });
     }
   }
