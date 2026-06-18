@@ -78,6 +78,19 @@
         }
       </section>
 
+      <!-- CARGA DIFERIDA: Comentarios (on viewport) -->
+      <section class="comments-wrapper">
+        @defer (on viewport) {
+          <app-movie-comments [movieId]="data.details.id"></app-movie-comments>
+        } @placeholder {
+          <div class="comments-placeholder">
+            <p>💬 Haz scroll para ver los comentarios...</p>
+          </div>
+        } @loading {
+          <div class="defer-spinner">Cargando comentarios...</div>
+        }
+      </section>
+
       <div class="action-buttons">
         <button class="back-button" onclick="history.back()">
           <span class="icon">←</span> Volver

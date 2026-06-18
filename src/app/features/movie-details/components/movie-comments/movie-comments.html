@@ -1,0 +1,119 @@
+<section class="comments-section">
+  <div class="comments-header">
+    <h2>💬 Comentarios</h2>
+    <button class="add-comment-btn" (click)="toggleForm()">
+      {{ showForm ? '✕ Cancelar' : '＋ Escribir comentario' }}
+    </button>
+  </div>
+
+  <!-- Mensaje de éxito -->
+  @if (successMessage) {
+    <div class="success-banner">{{ successMessage }}</div>
+  }
+
+  <!-- Formulario para nuevo comentario -->
+  @if (showForm) {
+    <div class="comment-form-card">
+      <h3>Nuevo Comentario</h3>
+
+      <div class="form-group">
+        <label for="author-name">Tu nombre</label>
+        <input
+          id="author-name"
+          type="text"
+          placeholder="Escribe tu nombre..."
+          [(ngModel)]="authorName"
+          maxlength="50"
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Calificación</label>
+        <div class="star-selector">
+          @for (star of [1, 2, 3, 4, 5]; track star) {
+            <button
+              class="star-btn"
+              [class.active]="star <= selectedRating"
+              (click)="setRating(star)"
+              type="button"
+            >
+              ★
+            </button>
+          }
+          <span class="rating-text">{{ selectedRating }} de 5</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="comment-text">Tu comentario</label>
+        <textarea
+          id="comment-text"
+          placeholder="¿Qué opinas de esta película?"
+          [(ngModel)]="commentText"
+          rows="3"
+          maxlength="500"
+        ></textarea>
+        <span class="char-count">{{ commentText.length }}/500</span>
+      </div>
+
+      <button
+        class="submit-btn"
+        (click)="submitComment()"
+        [disabled]="submitting || !authorName.trim() || !commentText.trim()"
+      >
+        @if (submitting) {
+          <span class="btn-spinner"></span> Enviando...
+        } @else {
+          Publicar Comentario
+        }
+      </button>
+    </div>
+  }
+
+  <!-- Estado de carga -->
+  @if (loading) {
+    <div class="comments-loading">
+      <div class="comment-skeleton"></div>
+      <div class="comment-skeleton"></div>
+    </div>
+  }
+
+  <!-- Error -->
+  @if (error && !loading) {
+    <div class="comments-error">
+      <p>⚠️ {{ error }}</p>
+      <button class="retry-btn" (click)="loadComments()">Reintentar</button>
+    </div>
+  }
+
+  <!-- Lista de comentarios -->
+  @if (!loading && !error) {
+    @if (comments.length === 0) {
+      <div class="no-comments">
+        <p class="no-comments-icon">💭</p>
+        <p>Aún no hay comentarios para esta película.</p>
+        <p class="no-comments-hint">¡Sé el primero en opinar!</p>
+      </div>
+    } @else {
+      <div class="comments-list">
+        @for (comment of comments; track comment.id) {
+          <div class="comment-card">
+            <div class="comment-top">
+              <div class="comment-avatar">{{ comment.author.charAt(0).toUpperCase() }}</div>
+              <div class="comment-meta">
+                <span class="comment-author">{{ comment.author }}</span>
+                <span class="comment-date">{{ comment.createdAt | date:'d MMM yyyy, HH:mm' }}</span>
+              </div>
+              <div class="comment-rating">
+                @for (star of [1, 2, 3, 4, 5]; track star) {
+                  <span class="star" [class.filled]="star <= comment.rating">★</span>
+                }
+              </div>
+            </div>
+            <p class="comment-text">{{ comment.text }}</p>
+          </div>
+        }
+      </div>
+    }
+  }
+</section>

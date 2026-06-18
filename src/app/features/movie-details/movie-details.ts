@@ -4,6 +4,7 @@ import { MovieService } from '../../core/services/movie.service';
 import { Movie } from '../../core/models/movie.model';
 import { CastCard } from '../../shared/components/cast-card/cast-card';
 import { MovieTrailer } from './components/movie-trailer/movie-trailer';
+import { MovieComments } from './components/movie-comments/movie-comments';
 import { Observable, forkJoin } from 'rxjs';
 import { CreditsResponse } from '../../core/models/cast.model';
 import { FavoritesService } from '../../core/services/favorites.service';
@@ -11,7 +12,7 @@ import { FavoritesService } from '../../core/services/favorites.service';
 @Component({
   selector: 'app-movie-details',
   standalone: true,
-  imports: [CommonModule, CastCard, MovieTrailer],
+  imports: [CommonModule, CastCard, MovieTrailer, MovieComments],
   templateUrl: './movie-details.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './movie-details.css',

@@ -275,3 +275,19 @@
   text-align: center;
   padding: 2rem;
 }
+/* === Contenedor de Comentarios === */
+.comments-wrapper {
+  margin-bottom: 3rem;
+}
+
+.comments-placeholder {
+  height: 150px;
+  background: rgba(255, 255, 255, 0.03);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  color: #888;
+  font-size: 1.1rem;
+}
