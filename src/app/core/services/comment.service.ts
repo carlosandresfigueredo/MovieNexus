@@ -24,7 +24,7 @@ export class CommentService {
   // ============================================================
 
   /** URL de la API de comentarios del instructor */
-  private API_URL = 'http://localhost:3000/api/comments';
+  private API_URL = 'https://api-comentarios-gm6f.onrender.com/api/comments';
 
   /** Nombre único de tu proyecto. Cámbialo por el tuyo */
   private APP_ID = 'MovieNexus';
