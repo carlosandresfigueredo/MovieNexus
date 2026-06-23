@@ -53,3 +53,4 @@ Thumbs.db
 # Archivos de entorno
 /src/environments/environment.ts
 /src/environments/environment.development.ts
+/.env

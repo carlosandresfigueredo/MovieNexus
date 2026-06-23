@@ -1,0 +1,158 @@
+<!-- Botón Flotante de Activación -->
+<button 
+  class="chat-toggle-btn" 
+  [class.chat-active]="isOpen()"
+  (click)="toggleChat()"
+  aria-label="Abrir asistente de IA"
+>
+  @if (!isOpen()) {
+    <!-- Icono de Chispa/IA (Sparkle) -->
+    <svg class="icon-sparkle" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2L14.7 9.3L22 12L14.7 14.7L12 22L9.3 14.7L2 12L9.3 9.3L12 2Z" />
+      <path d="M5 3L5.7 4.7L7.5 5L5.7 5.3L5 7L4.3 5.3L2.5 5L4.3 4.7L5 3Z" opacity="0.6"/>
+      <path d="M19 17L19.7 18.7L21.5 19L19.7 19.3L19 21L18.3 19.3L16.5 19L18.3 18.7L19 17Z" opacity="0.6"/>
+    </svg>
+  } @else {
+    <!-- Icono de Cerrar (X) -->
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  }
+</button>
+
+<!-- Ventana de Chat Flotante -->
+@if (isOpen()) {
+  <div class="chat-window" [class.window-open]="isOpen()">
+    <!-- Cabecera del Chat -->
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <div class="chat-avatar">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L14.7 9.3L22 12L14.7 14.7L12 22L9.3 14.7L2 12L9.3 9.3L12 2Z" />
+          </svg>
+          <span class="avatar-status"></span>
+        </div>
+        <div>
+          <h3>Nexus AI</h3>
+          <p>Tu asistente cinéfilo</p>
+        </div>
+      </div>
+      <div class="chat-header-actions">
+        <!-- Botón Limpiar Historial -->
+        <button class="action-btn" (click)="clearChat($event)" title="Limpiar chat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+        </button>
+        <!-- Botón Minimizar -->
+        <button class="action-btn" (click)="toggleChat()" title="Minimizar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Contenedor de Mensajes -->
+    <div class="chat-body" #scrollContainer>
+      <div class="messages-list">
+        @for (msg of geminiService.messages(); track $index) {
+          <div class="message-wrapper" [class.msg-user]="msg.sender === 'user'" [class.msg-ai]="msg.sender === 'ai'">
+            <!-- Burbuja de Mensaje -->
+            <div class="chat-bubble">
+              <div [innerHTML]="parseMarkdown(msg.text)"></div>
+            </div>
+
+            <!-- Recomendaciones de Películas (si existen) -->
+            @if (msg.movies && msg.movies.length > 0) {
+              <div class="recommended-movies-container">
+                <div class="movies-scroll-row">
+                  @for (movie of msg.movies; track movie.id) {
+                    <div class="mini-movie-card">
+                      <div class="card-img-wrapper">
+                        <img 
+                          [src]="movie.poster_path ? 'https://image.tmdb.org/t/p/w154' + movie.poster_path : 'assets/no-poster.png'" 
+                          [alt]="movie.title" 
+                          class="mini-poster"
+                          loading="lazy"
+                        >
+                        <div class="card-rating">
+                          <svg viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                          </svg>
+                          <span>{{ movie.vote_average | number:'1.1-1' }}</span>
+                        </div>
+                      </div>
+                      <div class="mini-info">
+                        <h4>{{ movie.title }}</h4>
+                        <span class="mini-year">{{ movie.release_date | date:'yyyy' }}</span>
+                        <a 
+                          [routerLink]="['/movie', movie.id]" 
+                          class="view-details-link"
+                          (click)="closeChat()"
+                        >
+                          Ver detalles
+                        </a>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Indicador de Carga (IA Escribiendo...) -->
+        @if (geminiService.isTyping()) {
+          <div class="message-wrapper msg-ai">
+            <div class="chat-bubble typing-bubble">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Sugerencias Rápidas (Chips) - Solo se muestran si no hay interacción del usuario todavía -->
+      @if (geminiService.messages().length === 1 && !geminiService.isTyping()) {
+        <div class="quick-suggestions-panel">
+          <p class="suggestions-title">Sugerencias rápidas:</p>
+          <div class="chips-container">
+            @for (chip of suggestionChips; track chip) {
+              <button class="suggestion-chip" (click)="sendMessage(chip)">
+                {{ chip }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Pie del Chat / Entrada de Mensajes -->
+    <div class="chat-footer">
+      <input 
+        type="text" 
+        class="chat-input"
+        placeholder="Escribe tu mensaje..."
+        [(ngModel)]="userMessage"
+        (keyup.enter)="sendMessage()"
+        [disabled]="geminiService.isTyping()"
+      >
+      <button 
+        class="chat-send-btn" 
+        (click)="sendMessage()"
+        [disabled]="!userMessage().trim() || geminiService.isTyping()"
+        aria-label="Enviar mensaje"
+      >
+        <!-- Icono de Enviar (Flecha/Avión) -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </div>
+  </div>
+}
