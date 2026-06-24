@@ -66,7 +66,7 @@ Reglas críticas para 'movieQueries':
     }
   };
 
-  const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+  const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${GEMINI_API_KEY}`;
 
   try {
     const geminiRes = await fetch(geminiUrl, {
