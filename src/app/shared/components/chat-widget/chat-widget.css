@@ -506,6 +506,64 @@
   transform: translate(1px, -1px);
 }
 
+.chat-mic-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s, transform 0.2s;
+}
+
+.chat-mic-btn:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--primary-hover);
+  transform: scale(1.05);
+}
+
+.chat-mic-btn:active {
+  transform: scale(0.95);
+}
+
+.chat-mic-btn:disabled {
+  color: var(--text-muted);
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chat-mic-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Estado de grabación activo */
+.chat-mic-btn.recording {
+  color: #ef4444; /* Rojo vibrante */
+  background: rgba(239, 68, 68, 0.15);
+  animation: pulse-record 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse-record {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+    transform: scale(1.1);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    transform: scale(1);
+  }
+}
+
+
 /* Personalización del scroll de la fila de películas */
 .movies-scroll-row::-webkit-scrollbar {
   height: 5px;

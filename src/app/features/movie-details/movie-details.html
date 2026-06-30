@@ -40,6 +40,51 @@
         <p class="overview">{{ data.details.overview }}</p>
       </section>
 
+      <!-- Dónde ver (Proveedores de Streaming) -->
+      @if (data.providers && (data.providers.flatrate || data.providers.rent || data.providers.buy)) {
+        <section class="providers-section">
+          <h2>¿Dónde ver?</h2>
+          <div class="providers-container">
+            @if (data.providers.flatrate; as flatrate) {
+              <div class="provider-group">
+                <span class="group-title">Suscripción</span>
+                <div class="provider-list">
+                  @for (prov of flatrate; track prov.provider_id) {
+                    <div class="provider-item" [title]="prov.provider_name">
+                      <img [src]="'https://image.tmdb.org/t/p/w92' + prov.logo_path" [alt]="prov.provider_name" class="provider-logo">
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+            @if (data.providers.rent; as rent) {
+              <div class="provider-group">
+                <span class="group-title">Renta</span>
+                <div class="provider-list">
+                  @for (prov of rent; track prov.provider_id) {
+                    <div class="provider-item" [title]="prov.provider_name">
+                      <img [src]="'https://image.tmdb.org/t/p/w92' + prov.logo_path" [alt]="prov.provider_name" class="provider-logo">
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+            @if (data.providers.buy; as buy) {
+              <div class="provider-group">
+                <span class="group-title">Compra</span>
+                <div class="provider-list">
+                  @for (prov of buy; track prov.provider_id) {
+                    <div class="provider-item" [title]="prov.provider_name">
+                      <img [src]="'https://image.tmdb.org/t/p/w92' + prov.logo_path" [alt]="prov.provider_name" class="provider-logo">
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </section>
+      }
+
       <!-- CARGA DIFERIDA: El Tráiler (on viewport) -->
       <section class="trailer-section">
         <h2>Tráiler Oficial</h2>

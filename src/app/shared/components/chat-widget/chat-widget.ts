@@ -21,6 +21,11 @@ export class ChatWidget implements AfterViewChecked {
   isOpen = signal(false);
   userMessage = signal('');
 
+  // Variables para la búsqueda por voz (Web Speech API)
+  isListening = signal(false);
+  speechSupported = signal(false);
+  private recognition: any = null;
+
   // Preguntas sugeridas para iniciar la conversación rápidamente
   suggestionChips = [
     '¿Qué películas de ciencia ficción me recomiendas?',
@@ -29,8 +34,59 @@ export class ChatWidget implements AfterViewChecked {
     'Recomiéndame una comedia romántica divertida'
   ];
 
+  constructor() {
+    if (typeof window !== 'undefined') {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        this.speechSupported.set(true);
+        this.recognition = new SpeechRecognition();
+        this.recognition.continuous = false;
+        this.recognition.lang = 'es-ES';
+        this.recognition.interimResults = false;
+        this.recognition.maxAlternatives = 1;
+
+        this.recognition.onstart = () => {
+          this.isListening.set(true);
+        };
+
+        this.recognition.onend = () => {
+          this.isListening.set(false);
+        };
+
+        this.recognition.onerror = (event: any) => {
+          console.error('Speech recognition error:', event.error);
+          this.isListening.set(false);
+        };
+
+        this.recognition.onresult = (event: any) => {
+          const transcript = event.results[0][0].transcript;
+          if (transcript) {
+            this.userMessage.set(transcript);
+          }
+        };
+      }
+    }
+  }
+
   ngAfterViewChecked() {
     this.scrollToBottom();
+  }
+
+  /**
+   * Alterna el dictado por voz (inicia o detiene la captura del micrófono)
+   */
+  toggleListening(): void {
+    if (!this.speechSupported() || !this.recognition) return;
+
+    if (this.isListening()) {
+      this.recognition.stop();
+    } else {
+      try {
+        this.recognition.start();
+      } catch (e) {
+        console.error('Error starting recognition:', e);
+      }
+    }
   }
 
   /**
