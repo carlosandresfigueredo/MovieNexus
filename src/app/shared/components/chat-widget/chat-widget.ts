@@ -60,8 +60,13 @@ export class ChatWidget implements AfterViewChecked {
 
         this.recognition.onresult = (event: any) => {
           const transcript = event.results[0][0].transcript;
-          if (transcript) {
+          if (transcript && transcript.trim()) {
             this.userMessage.set(transcript);
+            // Auto-enviar el mensaje de voz tras un breve retraso (600ms) para que el usuario pueda ver el texto transcrito
+            setTimeout(() => {
+              this.sendMessage(transcript);
+              this.userMessage.set('');
+            }, 600);
           }
         };
       }
